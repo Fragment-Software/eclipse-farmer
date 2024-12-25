@@ -1,0 +1,41 @@
+[package]
+name = "eclipse-farmer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+solana-account-decoder-client-types = "2.1.6"
+alloy = { version = "0.8.0", features = ["full", "json"] }
+alloy-chains = "0.1.48"
+arrayref = "0.3.9"
+base64 = "0.22.1"
+bincode = "1.3.3"
+borsh = "1.5.3"
+chrono = "0.4.39"
+dialoguer = "0.11.0"
+eyre = "0.6.12"
+indicatif = "0.17.9"
+num_enum = "0.7.3"
+rand = "0.8.5"
+reqwest = { version = "0.12.9", features = ["json", "socks"] }
+serde = { version = "1.0.216", features = ["derive"] }
+serde_json = "1.0.133"
+solana-client = "2.1.5"
+solana-program = "2.1.5"
+solana-sdk = "2.1.5"
+solana-transaction-status = "2.1.5"
+term_size = "0.3.2"
+tokio = { version = "1.42.0", features = ["full"] }
+toml = "0.8.19"
+tracing = "0.1.41"
+tracing-appender = "0.2.3"
+tracing-subscriber = "0.3.19"
+migration = { path = "./migration" }
+sea-orm = { version = "1.1.0", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-rustls",
+    "macros",
+] }
+itertools = "0.13.0"
+fake = "3.0.1"
+solana-rpc-client = "2.1.7"

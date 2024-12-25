@@ -1,0 +1,9 @@
+/target
+data/logs
+
+data/database.sqlite
+
+.DS_Store
+.env
+
+Cargo.lock

@@ -1,0 +1,28 @@
+[general]
+ECLIPSE_RPC_URL = "https://mainnetbeta-rpc.eclipse.xyz"
+MAINNET_RPC_URL = ""
+THREAD_COUNT = 2                                        # amount of threads to be spawned in parallel
+
+[bridge]
+BALANCE_PERCENTAGE_RANGE = [10, 20] # balance percentage to be bridged
+WALLET_SLEEP_DELAY_RANGE = [
+    10,
+    20,
+] # random delay between each wallet in a thread
+
+[lifinity]
+SWAPS_COUNT_RANGE = [
+    2,
+    3,
+] # range of swaps to be done, leave as [0, 0] if you don't want to use this in warmup
+BALANCE_PERCENTAGE_RANGE = [10, 20] # balance percentage to be swapped
+WALLET_SLEEP_DELAY_RANGE = [
+    10,
+    20,
+] # random delay between each wallet in a thread
+
+[underdog]
+CREATE_COUNT_RANGE = [
+    0,
+    0,
+] # range of nfts to be created, leave as [0, 0] if you don't want to use this in warmup
