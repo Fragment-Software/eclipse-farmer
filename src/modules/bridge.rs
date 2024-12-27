@@ -59,8 +59,8 @@ pub async fn bridge_mode(connection: DbConn, config: Arc<Config>) -> eyre::Resul
             Err(e) => eyre::bail!(e),
         };
 
-    let chunk_size = accounts_states_ids.len() / thread_count +
-        if accounts_states_ids.len() % thread_count != 0 { 1 } else { 0 };
+    let chunk_size = accounts_states_ids.len() / thread_count
+        + if accounts_states_ids.len() % thread_count != 0 { 1 } else { 0 };
 
     let mut handles = JoinSet::new();
 
@@ -141,6 +141,8 @@ where
     let balance = client.get_token_balance(Token::ETH, None).await?;
     let percentage = random_in_range(balance_range);
     let mut amount = balance * U256::from(percentage) / U256::from(100);
+    let divisor = U256::from(10).pow(U256::from(11));
+    amount = (amount / divisor) * divisor;
     let ui_amount = format_units(amount, 18)?;
 
     let min_amount = parse_ether("0.002")?;

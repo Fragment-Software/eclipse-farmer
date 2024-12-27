@@ -1,5 +1,3 @@
-// #![allow(unused, dead_code)]
-
 use modules::menu;
 
 use utils::logger::init_default_logger;
