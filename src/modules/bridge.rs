@@ -143,7 +143,7 @@ where
     let mut amount = balance * U256::from(percentage) / U256::from(100);
     let divisor = U256::from(10).pow(U256::from(11));
     amount = (amount / divisor) * divisor;
-    let ui_amount = format_units(amount, 18)?;
+    let mut ui_amount = format_units(amount, 18)?;
 
     let min_amount = parse_ether("0.002")?;
     if amount < min_amount {
@@ -152,6 +152,7 @@ where
             format_units(min_amount, 18)?
         );
         amount = min_amount;
+        ui_amount = format_units(amount, 18)?;
     }
 
     tracing::info!("{client_address} | Bridging {ui_amount} ETH to {eclipse_pubkey}");
