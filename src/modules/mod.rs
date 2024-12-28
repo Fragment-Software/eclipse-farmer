@@ -77,6 +77,7 @@ async fn db_menu(config: Arc<Config>, conn: DbConn) -> eyre::Result<Option<DbCon
 
         match sub_selection {
             0 => {
+                conn.close().await?;
                 let conn = establish_connection().await?;
                 generate_db(&config, &conn).await?;
                 tracing::info!("Database generated successfully");
