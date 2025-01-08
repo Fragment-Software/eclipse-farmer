@@ -1,6 +1,6 @@
 use crate::{
     config::Config,
-    db::{establish_connection, generate::generate_db},
+    db::{erase::erase_all_tables, establish_connection, generate::generate_db},
 };
 use bridge::bridge_mode;
 use dialoguer::{theme::ColorfulTheme, Select};
@@ -32,7 +32,7 @@ const LOGO: &str = r#"
 
 pub async fn menu() -> eyre::Result<()> {
     let config = Arc::new(Config::read_default().await);
-    let mut conn = establish_connection().await?;
+    let conn = establish_connection().await?;
 
     println!("{LOGO}");
 
@@ -48,11 +48,7 @@ pub async fn menu() -> eyre::Result<()> {
             .unwrap();
 
         match selection {
-            0 => {
-                if let Some(connection) = db_menu(config.clone(), conn.clone()).await? {
-                    conn = connection
-                }
-            }
+            0 => db_menu(config.clone(), conn.clone()).await?,
             1 => bridge_mode(conn.clone(), config.clone()).await?,
             2 => warmup_mode(conn.clone(), config.clone()).await?,
             3 => {
@@ -63,7 +59,7 @@ pub async fn menu() -> eyre::Result<()> {
     }
 }
 
-async fn db_menu(config: Arc<Config>, conn: DbConn) -> eyre::Result<Option<DbConn>> {
+async fn db_menu(config: Arc<Config>, conn: DbConn) -> eyre::Result<()> {
     loop {
         let sub_options =
             vec!["Generate a new database", "Append data to the existing database", "Back"];
@@ -77,11 +73,12 @@ async fn db_menu(config: Arc<Config>, conn: DbConn) -> eyre::Result<Option<DbCon
 
         match sub_selection {
             0 => {
-                conn.close().await?;
-                let conn = establish_connection().await?;
-                generate_db(&config, &conn).await?;
-                tracing::info!("Database generated successfully");
-                return Ok(Some(conn));
+                erase_all_tables(&conn).await?;
+                if generate_db(&config, &conn).await.is_ok() {
+                    tracing::info!("Database generated successfully");
+                } else {
+                    tracing::error!("Failed to generate a database")
+                }
             }
             1 => {
                 generate_db(&config, &conn).await?;
@@ -96,5 +93,5 @@ async fn db_menu(config: Arc<Config>, conn: DbConn) -> eyre::Result<Option<DbCon
         }
     }
 
-    Ok(None)
+    Ok(())
 }

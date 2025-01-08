@@ -44,6 +44,8 @@ pub async fn generate_db(config: &Config, connection: &DbConn) -> Result<(), DbE
                                 eclipse_pk,
                             );
                     }
+                } else {
+                    tracing::error!("{e}")
                 }
             }
         }

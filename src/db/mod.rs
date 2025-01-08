@@ -1,11 +1,12 @@
 use std::time::Duration;
 
-use constants::{DB_FILE_PATH, DEFAULT_DB_URL};
+use constants::DEFAULT_DB_URL;
 use migration::{DbErr, Migrator, MigratorTrait};
 use sea_orm::{ConnectOptions, Database, DbConn, TransactionTrait};
 
 mod constants;
 pub mod entities;
+pub mod erase;
 pub mod generate;
 pub mod service;
 
@@ -20,11 +21,6 @@ pub async fn establish_connection() -> Result<DbConn, DbErr> {
         .idle_timeout(Duration::from_secs(8))
         .max_lifetime(Duration::from_secs(8))
         .sqlx_logging(false);
-
-    if std::path::Path::new(DB_FILE_PATH).exists() {
-        std::fs::remove_file(DB_FILE_PATH)
-            .unwrap_or_else(|e| panic!("Failed to remove {DB_FILE_PATH}: {e}"));
-    }
 
     let db = Database::connect(options).await.expect("Failed to setup the database");
 
